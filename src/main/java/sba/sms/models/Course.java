@@ -15,6 +15,36 @@ import java.util.Set;
  * of the relationship. Implement Lombok annotations to eliminate boilerplate code.
  */
 
+@Entity
+@Table(name = "course")
+@Data // Lombok annotation for getters, setters, equals, and hashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Course {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    Integer id;
 
+    @Column(name = "name", nullable = false, length = 100)
+    String name;
+
+    @Column(name = "instructor", nullable = false, length = 100)
+    String instructor;
+
+    @ManyToMany(mappedBy = "courses")
+    Set<Student> students = new LinkedHashSet<>();
+
+    // Constructor excluding collections for convenience
+    public Course(String name, String instructor) {
+        this.name = name;
+        this.instructor = instructor;
+    }
+
+    // toString excluding collections to avoid infinite loops
+    @Override
+    public String toString() {
+        return "Course{id=" + id + ", name='" + name + '\'' + ", instructor='" + instructor + "'}";
+    }
 }
